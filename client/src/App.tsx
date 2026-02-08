@@ -8,11 +8,24 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
 import { Badge } from "@/components/ui/badge";
-import { Bell } from "lucide-react";
+import { Bell, LogOut, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { I18nProvider, useI18n } from "@/lib/i18n";
+import { AuthProvider, useAuth } from "@/lib/auth";
 import { Link } from "wouter";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
+// Pages
 import NotFound from "@/pages/not-found";
+import Login from "@/pages/login";
 import Dashboard from "@/pages/dashboard";
 import Conversations from "@/pages/conversations";
 import Customers from "@/pages/customers";
@@ -24,7 +37,7 @@ import Notifications from "@/pages/notifications";
 import Settings from "@/pages/settings";
 import Help from "@/pages/help";
 
-function Router() {
+function ProtectedRouter() {
   return (
     <Switch>
       <Route path="/" component={Dashboard} />
@@ -42,9 +55,70 @@ function Router() {
   );
 }
 
+function UserMenu() {
+  const { user, signOut, isDemoMode } = useAuth();
+
+  if (!user) return null;
+
+  const initials = user.name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+  const roleLabels: Record<string, string> = {
+    owner: 'Propietario',
+    admin: 'Administrador',
+    manager: 'Gerente',
+    staff: 'Personal',
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="relative">
+          <Avatar className="h-8 w-8">
+            <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+              {initials}
+            </AvatarFallback>
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <div className="flex items-center gap-2">
+              <p className="text-sm font-medium leading-none">{user.name}</p>
+              {isDemoMode && (
+                <Badge variant="secondary" className="text-xs h-5 px-1.5">
+                  <Sparkles className="h-3 w-3 mr-1" />
+                  Demo
+                </Badge>
+              )}
+            </div>
+            <p className="text-xs leading-none text-muted-foreground">
+              {user.email}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {roleLabels[user.role] || user.role}
+            </p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => signOut()}>
+          <LogOut className="mr-2 h-4 w-4" />
+          Cerrar Sesión
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 function AppLayout() {
   const { t } = useI18n();
-  
+  const { isDemoMode } = useAuth();
+
   const style = {
     "--sidebar-width": "16rem",
     "--sidebar-width-icon": "3.5rem",
@@ -62,6 +136,12 @@ function AppLayout() {
               <Badge variant="outline" className="text-xs border-accent/30 text-accent">
                 {t("common.elSalvador")}
               </Badge>
+              {isDemoMode && (
+                <Badge variant="secondary" className="text-xs">
+                  <Sparkles className="h-3 w-3 mr-1" />
+                  Modo Demo
+                </Badge>
+              )}
             </div>
             <div className="flex items-center gap-1">
               <Link href="/notifications">
@@ -72,10 +152,11 @@ function AppLayout() {
               </Link>
               <LanguageToggle />
               <ThemeToggle />
+              <UserMenu />
             </div>
           </header>
           <main className="flex-1 overflow-auto">
-            <Router />
+            <ProtectedRouter />
           </main>
         </div>
       </div>
@@ -83,13 +164,38 @@ function AppLayout() {
   );
 }
 
+function AuthenticatedApp() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="w-12 h-12 rounded-lg gold-gradient flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <span className="text-xl font-bold text-primary-foreground">LO</span>
+          </div>
+          <p className="text-muted-foreground">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
+  return <AppLayout />;
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <I18nProvider>
-          <AppLayout />
-          <Toaster />
+          <AuthProvider>
+            <AuthenticatedApp />
+            <Toaster />
+          </AuthProvider>
         </I18nProvider>
       </TooltipProvider>
     </QueryClientProvider>

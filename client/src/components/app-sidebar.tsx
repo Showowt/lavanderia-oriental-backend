@@ -23,14 +23,17 @@ import {
   Bell,
   HelpCircle,
   Package,
-  ShoppingBag
+  ShoppingBag,
+  Sparkles
 } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import { useI18n } from "@/lib/i18n";
+import { useAuth } from "@/lib/auth";
 
 export function AppSidebar() {
   const [location] = useLocation();
   const { t } = useI18n();
+  const { user, isDemoMode } = useAuth();
 
   const mainNavItems = [
     {
@@ -162,12 +165,17 @@ export function AppSidebar() {
         <div className="flex items-center gap-3 p-2 rounded-lg bg-sidebar-accent/50">
           <Avatar className="h-8 w-8">
             <AvatarFallback className="bg-primary text-primary-foreground text-xs">
-              AD
+              {user?.name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U'}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate">Admin User</p>
-            <p className="text-xs text-sidebar-foreground/70">admin@lavanderia.sv</p>
+            <div className="flex items-center gap-1.5">
+              <p className="text-sm font-medium truncate">{user?.name || 'Usuario'}</p>
+              {isDemoMode && (
+                <Sparkles className="h-3 w-3 text-amber-500 shrink-0" />
+              )}
+            </div>
+            <p className="text-xs text-sidebar-foreground/70 truncate">{user?.email || ''}</p>
           </div>
         </div>
       </SidebarFooter>
