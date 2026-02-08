@@ -176,6 +176,80 @@ app.get("/api/knowledge-base", async (req, res) => {
   ]);
 });
 
+// Analytics Summary
+app.get("/api/analytics/summary", async (req, res) => {
+  const now = new Date();
+  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
+  res.json({
+    period: {
+      start: weekAgo.toISOString(),
+      end: now.toISOString()
+    },
+    conversations: {
+      total: 1247,
+      resolved: 1189,
+      escalated: 58,
+      aiResolutionRate: 94.2
+    },
+    messages: {
+      total: 8934,
+      inbound: 4567,
+      outbound: 4367,
+      avgPerConversation: 7.2
+    },
+    orders: {
+      total: 423,
+      completed: 398,
+      cancelled: 12,
+      pending: 13,
+      totalRevenue: 2847.50
+    },
+    customers: {
+      total: 856,
+      new: 47,
+      returning: 809,
+      vip: 23
+    },
+    performance: {
+      avgResponseTime: "2.3s",
+      customerSatisfaction: 96,
+      peakHours: ["10:00", "14:00", "17:00"]
+    },
+    topServices: [
+      { name: "Carga Normal - Lavado + Secado", count: 187, revenue: 1028.50 },
+      { name: "DRIP Básico", count: 89, revenue: 881.10 },
+      { name: "Carga Pesada - Lavado + Secado", count: 67, revenue: 435.50 },
+      { name: "DRIP Especial", count: 45, revenue: 580.50 },
+      { name: "Delivery", count: 156, revenue: 312.00 }
+    ],
+    locationPerformance: [
+      { name: "San Miguel - Casa Matriz", orders: 156, revenue: 1023.50 },
+      { name: "Lourdes Colón", orders: 98, revenue: 687.30 },
+      { name: "Santa Ana", orders: 87, revenue: 598.20 },
+      { name: "San Miguel - Col. Gavidia", orders: 52, revenue: 345.00 },
+      { name: "Usulután", orders: 30, revenue: 193.50 }
+    ]
+  });
+});
+
+// Daily reports
+app.get("/api/analytics/daily", async (req, res) => {
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
+    days.push({
+      date: date.toISOString().split('T')[0],
+      conversations: Math.floor(Math.random() * 50) + 150,
+      messages: Math.floor(Math.random() * 200) + 800,
+      orders: Math.floor(Math.random() * 20) + 50,
+      revenue: Math.floor(Math.random() * 200) + 300,
+      newCustomers: Math.floor(Math.random() * 10) + 5
+    });
+  }
+  res.json(days);
+});
+
 // Export for Vercel
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // @ts-ignore - Express handles the request/response

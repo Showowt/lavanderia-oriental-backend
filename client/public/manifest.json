@@ -1,0 +1,29 @@
+{
+  "name": "Lavandería Oriental - Panel de Control",
+  "short_name": "Lavandería AI",
+  "description": "Sistema de gestión de servicio al cliente con IA para Lavandería Oriental",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#D4AF37",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity"],
+  "lang": "es-SV",
+  "dir": "ltr",
+  "scope": "/",
+  "prefer_related_applications": false
+}
