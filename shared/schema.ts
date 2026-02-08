@@ -309,3 +309,26 @@ export interface EscalationItem {
   conversationId: string;
   locationName?: string;
 }
+
+export interface PerformanceMetrics {
+  firstContactResolution: {
+    percentage: number;
+    total: number;
+    resolved: number;
+  };
+  averageRating: {
+    score: number;
+    maxScore: number;
+    totalReviews: number;
+  };
+  averageResponseTime: {
+    seconds: number;
+    trend: 'improving' | 'stable' | 'declining';
+  };
+  costSavings: {
+    amount: number;
+    currency: string;
+    period: 'day' | 'week' | 'month';
+    calculation: string;
+  };
+}

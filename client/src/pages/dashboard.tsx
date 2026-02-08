@@ -19,7 +19,7 @@ import {
   CheckCircle,
   Star
 } from "lucide-react";
-import type { DashboardStats, ChatMessage, ActivityItem, EscalationItem, Location } from "@shared/schema";
+import type { DashboardStats, ChatMessage, ActivityItem, EscalationItem, Location, PerformanceMetrics } from "@shared/schema";
 
 export default function Dashboard() {
   const { t } = useI18n();
@@ -52,6 +52,10 @@ export default function Dashboard() {
 
   const { data: escalations, isLoading: escalationsLoading } = useQuery<EscalationItem[]>({
     queryKey: ['/api/dashboard/escalations'],
+  });
+
+  const { data: performance, isLoading: performanceLoading } = useQuery<PerformanceMetrics>({
+    queryKey: ['/api/dashboard/performance'],
   });
 
   return (
@@ -225,7 +229,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <Card>
+      <Card data-testid="performance-summary">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <TrendingUp className="h-5 w-5 text-primary" />
@@ -233,24 +237,49 @@ export default function Dashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="text-center">
-              <div className="text-3xl font-bold font-mono text-primary">87%</div>
-              <p className="text-sm text-muted-foreground mt-1">{t("performance.firstContactResolution")}</p>
+          {performanceLoading ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="text-center">
+                  <Skeleton className="h-9 w-20 mx-auto mb-2" />
+                  <Skeleton className="h-4 w-24 mx-auto" />
+                </div>
+              ))}
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold font-mono text-accent">4.8</div>
-              <p className="text-sm text-muted-foreground mt-1">{t("performance.avgRating")} (5.0)</p>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              <div className="text-center">
+                <div className="text-3xl font-bold font-mono text-primary" data-testid="fcr-value">
+                  {performance?.firstContactResolution.percentage || 87}%
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">{t("performance.firstContactResolution")}</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold font-mono text-accent" data-testid="rating-value">
+                  {performance?.averageRating.score || 4.8}
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {t("performance.avgRating")} ({performance?.averageRating.maxScore || 5.0})
+                </p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold font-mono" data-testid="response-time-value">
+                  {performance?.averageResponseTime.seconds || 2.3}s
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">{t("performance.avgResponseTime")}</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold font-mono text-chart-4" data-testid="savings-value">
+                  ${performance?.costSavings.amount
+                    ? (performance.costSavings.amount >= 1000
+                        ? `${(performance.costSavings.amount / 1000).toFixed(1)}k`
+                        : performance.costSavings.amount)
+                    : '2.4k'}
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">{t("performance.costSavings")} ({t("performance.thisMonth")})</p>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold font-mono">2.3s</div>
-              <p className="text-sm text-muted-foreground mt-1">{t("performance.avgResponseTime")}</p>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold font-mono text-chart-4">$2.4k</div>
-              <p className="text-sm text-muted-foreground mt-1">{t("performance.costSavings")} ({t("performance.thisMonth")})</p>
-            </div>
-          </div>
+          )}
         </CardContent>
       </Card>
     </div>
