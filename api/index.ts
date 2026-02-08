@@ -74,7 +74,7 @@ app.get("/api/dashboard/stats", async (req, res) => {
   try {
     const [totalCustomers] = await db.select({ count: count() }).from(customers);
     const [activeConversations] = await db.select({ count: count() }).from(conversations).where(eq(conversations.status, 'active'));
-    const [todayMessages] = await db.select({ count: count() }).from(messages).where(sql`DATE(${messages.timestamp}) = CURRENT_DATE`);
+    const [todayMessages] = await db.select({ count: count() }).from(messages).where(sql`DATE(${messages.createdAt}) = CURRENT_DATE`);
     const [pendingOrders] = await db.select({ count: count() }).from(orders).where(eq(orders.status, 'pending'));
     
     res.json({
@@ -125,7 +125,7 @@ app.get("/api/customers", async (req, res) => {
 // Conversations
 app.get("/api/conversations", async (req, res) => {
   try {
-    const allConversations = await db.select().from(conversations).orderBy(desc(conversations.lastMessageAt));
+    const allConversations = await db.select().from(conversations).orderBy(desc(conversations.updatedAt));
     res.json(allConversations);
   } catch (error) {
     console.error("Conversations error:", error);
@@ -136,8 +136,8 @@ app.get("/api/conversations", async (req, res) => {
 // Messages by conversation
 app.get("/api/conversations/:id/messages", async (req, res) => {
   try {
-    const conversationId = parseInt(req.params.id);
-    const conversationMessages = await db.select().from(messages).where(eq(messages.conversationId, conversationId)).orderBy(messages.timestamp);
+    const conversationId = req.params.id;
+    const conversationMessages = await db.select().from(messages).where(eq(messages.conversationId, conversationId)).orderBy(messages.createdAt);
     res.json(conversationMessages);
   } catch (error) {
     console.error("Messages error:", error);
