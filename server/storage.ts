@@ -85,7 +85,28 @@ export class MemStorage implements IStorage {
 
     locationData.forEach(loc => {
       const id = randomUUID();
-      this.locations.set(id, { ...loc, id, hours: null });
+      const now = new Date();
+      this.locations.set(id, {
+        ...loc,
+        id,
+        hours: null,
+        slug: null,
+        email: null,
+        notes: null,
+        latitude: null,
+        longitude: null,
+        rating: null,
+        reviewCount: null,
+        imageUrl: null,
+        deliveryAvailable: true,
+        deliveryRadius: null,
+        deliveryFee: null,
+        maxCapacity: null,
+        currentLoad: null,
+        status: 'active',
+        createdAt: now,
+        updatedAt: now
+      } as Location);
     });
 
     const customerData = [
@@ -98,12 +119,23 @@ export class MemStorage implements IStorage {
 
     customerData.forEach(cust => {
       const id = randomUUID();
-      this.customers.set(id, { 
-        ...cust, 
-        id, 
-        preferredLocationId: null, 
-        lastContact: new Date() 
-      });
+      const now = new Date();
+      this.customers.set(id, {
+        ...cust,
+        id,
+        email: null,
+        notes: null,
+        preferredLocationId: null,
+        isVip: cust.totalOrders >= 15,
+        isBlocked: false,
+        totalSpent: String(cust.totalOrders * 6.5),
+        avgOrderValue: null,
+        loyaltyPoints: cust.totalOrders * 10,
+        lastOrderAt: now,
+        lastContact: now,
+        createdAt: now,
+        updatedAt: now
+      } as Customer);
     });
   }
 

@@ -104,16 +104,16 @@ export default function Locations() {
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <MessageSquare className="h-4 w-4" />
-                            {Math.floor(Math.random() * 20) + 5} {t("locations.conversations")}
+                            {(location as any).conversationsToday || 0} {t("locations.conversations")}
                           </span>
                           <span className="flex items-center gap-1">
                             <ShoppingBag className="h-4 w-4" />
-                            {Math.floor(Math.random() * 50) + 10} {t("locations.ordersToday")}
+                            {(location as any).ordersToday || 0} {t("locations.ordersToday")}
                           </span>
                         </div>
                         <div className="flex items-center gap-1 text-sm">
                           <Star className="h-4 w-4 text-primary" />
-                          <span className="font-medium">{(Math.random() * 0.5 + 4.5).toFixed(1)}</span>
+                          <span className="font-medium">{(location as any).rating || "4.8"}</span>
                           <span className="text-muted-foreground">/ 5.0</span>
                         </div>
                       </div>

@@ -17,6 +17,8 @@ import Dashboard from "@/pages/dashboard";
 import Conversations from "@/pages/conversations";
 import Customers from "@/pages/customers";
 import Locations from "@/pages/locations";
+import Services from "@/pages/services";
+import Orders from "@/pages/orders";
 import Analytics from "@/pages/analytics";
 import Notifications from "@/pages/notifications";
 import Settings from "@/pages/settings";
@@ -29,6 +31,8 @@ function Router() {
       <Route path="/conversations" component={Conversations} />
       <Route path="/customers" component={Customers} />
       <Route path="/locations" component={Locations} />
+      <Route path="/services" component={Services} />
+      <Route path="/orders" component={Orders} />
       <Route path="/analytics" component={Analytics} />
       <Route path="/notifications" component={Notifications} />
       <Route path="/settings" component={Settings} />

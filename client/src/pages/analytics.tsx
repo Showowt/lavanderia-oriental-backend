@@ -189,20 +189,169 @@ export default function Analytics() {
           </div>
         </TabsContent>
 
-        <TabsContent value="conversations" className="mt-6">
+        <TabsContent value="conversations" className="mt-6 space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-base">Métricas de Conversación</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <span className="text-sm">Tiempo promedio de respuesta</span>
+                  <span className="font-mono font-medium">2.3s</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <span className="text-sm">Mensajes por conversación</span>
+                  <span className="font-mono font-medium">4.2</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <span className="text-sm">Tasa de resolución en primer contacto</span>
+                  <span className="font-mono font-medium text-accent">87%</span>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                  <span className="text-sm">Satisfacción del cliente</span>
+                  <span className="font-mono font-medium text-primary">4.8/5.0</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-base">Temas Frecuentes</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {[
+                  { topic: "Precios de servicios", count: 312, percentage: 45 },
+                  { topic: "Horarios y sucursales", count: 198, percentage: 29 },
+                  { topic: "Estado de pedidos", count: 156, percentage: 23 },
+                  { topic: "Servicio delivery", count: 134, percentage: 19 },
+                  { topic: "Lavado de zapatos (DRIP)", count: 89, percentage: 13 },
+                ].map((item, idx) => (
+                  <div key={idx} className="space-y-1">
+                    <div className="flex items-center justify-between text-sm">
+                      <span>{item.topic}</span>
+                      <span className="text-muted-foreground">{item.count} consultas</span>
+                    </div>
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-primary/80 rounded-full"
+                        style={{ width: `${item.percentage * 2}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+
           <Card>
-            <CardContent className="p-8 text-center text-muted-foreground">
-              {t("analytics.conversations")} - Datos detallados disponibles próximamente
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Users className="h-5 w-5 text-primary" />
+                <CardTitle className="text-base">Conversaciones por Canal</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="text-center p-4 bg-accent/10 rounded-lg">
+                  <div className="text-3xl font-bold text-accent mb-1">94%</div>
+                  <p className="text-sm text-muted-foreground">WhatsApp</p>
+                </div>
+                <div className="text-center p-4 bg-primary/10 rounded-lg">
+                  <div className="text-3xl font-bold text-primary mb-1">4%</div>
+                  <p className="text-sm text-muted-foreground">Sitio Web</p>
+                </div>
+                <div className="text-center p-4 bg-muted rounded-lg">
+                  <div className="text-3xl font-bold mb-1">2%</div>
+                  <p className="text-sm text-muted-foreground">Teléfono</p>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="revenue" className="mt-6">
-          <Card>
-            <CardContent className="p-8 text-center text-muted-foreground">
-              {t("analytics.revenue")} - Datos detallados disponibles próximamente
-            </CardContent>
-          </Card>
+        <TabsContent value="revenue" className="mt-6 space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card className="p-4">
+              <div className="text-sm text-muted-foreground mb-1">Ingresos del Mes</div>
+              <div className="text-2xl font-bold text-accent">$15,470</div>
+              <div className="text-xs text-accent mt-1">+12% vs mes anterior</div>
+            </Card>
+            <Card className="p-4">
+              <div className="text-sm text-muted-foreground mb-1">Pedidos Completados</div>
+              <div className="text-2xl font-bold">1,847</div>
+              <div className="text-xs text-muted-foreground mt-1">Este mes</div>
+            </Card>
+            <Card className="p-4">
+              <div className="text-sm text-muted-foreground mb-1">Ticket Promedio</div>
+              <div className="text-2xl font-bold">$8.38</div>
+              <div className="text-xs text-primary mt-1">+5% vs mes anterior</div>
+            </Card>
+            <Card className="p-4">
+              <div className="text-sm text-muted-foreground mb-1">Delivery Generado</div>
+              <div className="text-2xl font-bold">$1,240</div>
+              <div className="text-xs text-muted-foreground mt-1">620 entregas</div>
+            </Card>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <DollarSign className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-base">Ingresos por Servicio</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {[
+                  { service: "Lavado + Secado", revenue: "$8,250", orders: 1250, color: "bg-primary" },
+                  { service: "Edredones", revenue: "$2,890", orders: 385, color: "bg-accent" },
+                  { service: "DRIP Zapatos", revenue: "$2,150", orders: 165, color: "bg-chart-3" },
+                  { service: "Solo Lavado", revenue: "$1,450", orders: 483, color: "bg-chart-4" },
+                  { service: "Delivery", revenue: "$730", orders: 365, color: "bg-chart-5" },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-3 h-3 rounded-full ${item.color}`} />
+                      <span className="font-medium text-sm">{item.service}</span>
+                    </div>
+                    <div className="flex items-center gap-4 text-sm">
+                      <span className="text-muted-foreground">{item.orders} pedidos</span>
+                      <span className="font-medium">{item.revenue}</span>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-primary" />
+                  <CardTitle className="text-base">Ingresos por Sucursal</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {topLocations.map((location, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                    <div className="flex items-center gap-3">
+                      <span className="w-6 h-6 rounded-full bg-primary/20 text-primary text-xs flex items-center justify-center font-medium">
+                        {idx + 1}
+                      </span>
+                      <span className="font-medium text-sm">{location.name}</span>
+                    </div>
+                    <span className="font-medium text-accent">{location.revenue}</span>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
       </Tabs>
     </div>

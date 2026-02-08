@@ -13,15 +13,17 @@ import {
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { 
-  LayoutDashboard, 
-  MessageSquare, 
-  Users, 
-  MapPin, 
-  Settings, 
+import {
+  LayoutDashboard,
+  MessageSquare,
+  Users,
+  MapPin,
+  Settings,
   BarChart3,
   Bell,
-  HelpCircle
+  HelpCircle,
+  Package,
+  ShoppingBag
 } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import { useI18n } from "@/lib/i18n";
@@ -51,7 +53,17 @@ export function AppSidebar() {
       titleKey: "nav.locations",
       url: "/locations",
       icon: MapPin,
-      badge: "7",
+      badge: "5",
+    },
+    {
+      titleKey: "nav.services",
+      url: "/services",
+      icon: Package,
+    },
+    {
+      titleKey: "nav.orders",
+      url: "/orders",
+      icon: ShoppingBag,
     },
   ];
 

@@ -185,12 +185,12 @@ export default function Settings() {
                 <p className="text-xs text-muted-foreground">+503 2222-3333</p>
               </div>
 
-              <div className="p-3 rounded-lg border">
+              <div className="p-3 rounded-lg border bg-accent/5 border-accent/20">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="font-medium text-sm">OpenAI GPT-4</span>
+                  <span className="font-medium text-sm">Claude AI (Anthropic)</span>
                   <span className="text-xs text-accent">Activo</span>
                 </div>
-                <p className="text-xs text-muted-foreground">Modelo: gpt-4-turbo</p>
+                <p className="text-xs text-muted-foreground">Modelo: claude-sonnet-4</p>
               </div>
 
               <div className="p-3 rounded-lg border border-dashed">
