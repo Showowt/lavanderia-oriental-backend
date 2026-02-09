@@ -102,6 +102,11 @@ export default function Analytics() {
 
   const { data: dailyData = [] } = useQuery<{ date: string; conversations: number; orders: number; revenue: number }[]>({
     queryKey: ["/api/analytics/daily", dateRange],
+    queryFn: async () => {
+      const res = await fetch(`/api/analytics/daily?range=${dateRange}`);
+      if (!res.ok) throw new Error("Failed to fetch daily data");
+      return res.json();
+    }
   });
 
   const formatPrice = (amount: number) => {
