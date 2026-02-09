@@ -65,10 +65,16 @@ export class ErrorBoundary extends Component<Props, State> {
               <p className="text-muted-foreground mb-4">
                 Ha ocurrido un error inesperado. Por favor intente recargar la página.
               </p>
-              {process.env.NODE_ENV === "development" && this.state.error && (
-                <pre className="mt-4 p-3 bg-muted rounded text-xs text-left overflow-auto max-h-32">
-                  {this.state.error.message}
-                </pre>
+              {this.state.error && (
+                <details className="mt-4 text-left">
+                  <summary className="text-sm font-medium cursor-pointer text-muted-foreground hover:text-foreground">
+                    Ver detalles del error
+                  </summary>
+                  <pre className="mt-2 p-3 bg-muted rounded text-xs overflow-auto max-h-48">
+                    {this.state.error.message}
+                    {this.state.error.stack && `\n\n${this.state.error.stack}`}
+                  </pre>
+                </details>
               )}
             </CardContent>
             <CardFooter className="flex gap-2 justify-center">
